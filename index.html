@@ -3,20 +3,75 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Home Build Review — Setup</title>
+<title>Planmark — Collaborative floor plan review</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 40'%3E%3Cpath fill='%23CD1543' d='M16 0C7.2 0 0 7.2 0 16c0 12 16 24 16 24s16-12 16-24C32 7.2 24.8 0 16 0z'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23EAE5E1'/%3E%3C/svg%3E">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', -apple-system, Arial, sans-serif; background: #f4f1ee; color: #2c2c2c; line-height: 1.5; }
 
+/* Top nav */
+.topnav { background: rgba(0,0,0,0.25); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 2; }
+.topnav .brand-sm { display: flex; align-items: center; gap: 8px; color: #EAE5E1; font-weight: 700; font-size: 15px; letter-spacing: 0.3px; }
+.topnav .brand-sm svg { width: 16px; height: 20px; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+.topnav a { color: rgba(234,229,225,0.75); text-decoration: none; font-size: 13px; margin-left: 18px; transition: color 0.15s; }
+.topnav a:hover { color: #EAE5E1; }
+
 /* Hero */
-.hero { background: linear-gradient(135deg, #3D2C2B 0%, #5a4342 100%); color: #EAE5E1; padding: 64px 24px 56px; text-align: center; }
-.hero h1 { font-size: 36px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.5px; }
-.hero .tag { font-size: 15px; opacity: 0.7; max-width: 580px; margin: 0 auto 24px; }
-.hero .cta { display: inline-block; background: #CD1543; color: white; padding: 14px 32px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; letter-spacing: 0.3px; cursor: pointer; border: none; font-family: inherit; }
-.hero .cta:hover { opacity: 0.9; }
-.hero .features { display: flex; justify-content: center; gap: 28px; margin-top: 36px; flex-wrap: wrap; }
+.hero { background: linear-gradient(135deg, #2c1f1e 0%, #3D2C2B 45%, #5a4342 100%); color: #EAE5E1; padding: 56px 24px 60px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -40%; left: -10%; right: -10%; bottom: -40%; background: radial-gradient(ellipse at center, rgba(205,21,67,0.12) 0%, transparent 55%); pointer-events: none; }
+.hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
+.brand-logo { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.brand-logo svg { width: 36px; height: 45px; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.35)); }
+.brand-logo .wordmark { font-size: 38px; font-weight: 800; letter-spacing: -0.8px; line-height: 1; }
+.brand-logo .wordmark .plan { color: #EAE5E1; }
+.brand-logo .wordmark .mark { color: #CD1543; }
+.hero .tag { font-size: 17px; opacity: 0.88; max-width: 580px; margin: 0 auto 10px; font-weight: 400; line-height: 1.5; }
+.hero .subtag { font-size: 13px; opacity: 0.55; max-width: 520px; margin: 0 auto; }
+.hero .features { display: flex; justify-content: center; gap: 24px; margin-top: 32px; flex-wrap: wrap; }
 .hero .feat { font-size: 12px; opacity: 0.85; display: flex; align-items: center; gap: 6px; }
 .hero .feat-dot { width: 6px; height: 6px; background: #CD1543; border-radius: 50%; }
+
+/* Path picker */
+.path-picker { max-width: 820px; margin: -28px auto 0; padding: 0 24px; position: relative; z-index: 3; }
+.path-tabs { background: white; border-radius: 12px; padding: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; box-shadow: 0 8px 32px rgba(60,42,42,0.18); border: 1px solid #e8e2dc; }
+.path-tab { background: transparent; border: none; padding: 14px 18px; border-radius: 8px; cursor: pointer; font-family: inherit; text-align: left; transition: background 0.15s; display: flex; gap: 12px; align-items: center; }
+.path-tab:hover { background: #faf8f6; }
+.path-tab.active { background: #3D2C2B; color: #EAE5E1; }
+.path-tab.active .path-title { color: #EAE5E1; }
+.path-tab.active .path-sub { color: rgba(234,229,225,0.7); }
+.path-tab .path-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.path-tab .path-body { flex: 1; min-width: 0; }
+.path-title { font-size: 14px; font-weight: 700; color: #3D2C2B; display: block; margin-bottom: 2px; }
+.path-sub { font-size: 11px; color: #888; line-height: 1.4; display: block; }
+
+/* Setup mode sections */
+.setup-mode { display: none; }
+.setup-mode.active { display: block; }
+
+/* Claude Code section */
+.cc-intro { background: white; border-radius: 10px; padding: 24px; margin-bottom: 16px; border: 1px solid #e8e2dc; }
+.cc-intro h2 { margin-bottom: 8px; }
+.cc-intro p { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 10px; }
+.cc-steps { background: white; border-radius: 10px; padding: 24px; margin-bottom: 16px; border: 1px solid #e8e2dc; }
+.cc-step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f0ece8; }
+.cc-step:last-child { border-bottom: none; padding-bottom: 0; }
+.cc-step:first-child { padding-top: 0; }
+.cc-num { width: 28px; height: 28px; background: #CD1543; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+.cc-body { flex: 1; min-width: 0; }
+.cc-body h4 { font-size: 13px; font-weight: 700; color: #3D2C2B; margin-bottom: 4px; }
+.cc-body p { font-size: 12px; color: #666; line-height: 1.6; }
+.cc-body code { background: #f4f1ee; padding: 1px 6px; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; font-size: 11px; color: #3D2C2B; }
+.prompt-box { background: #2c2c2c; border-radius: 10px; padding: 0; margin-bottom: 16px; position: relative; overflow: hidden; }
+.prompt-box-header { background: #1f1f1f; color: #aaa; padding: 8px 14px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #000; }
+.prompt-box-copy { background: #3D2C2B; color: #EAE5E1; border: none; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; transition: background 0.15s; }
+.prompt-box-copy:hover { background: #CD1543; }
+.prompt-box-copy.copied { background: #1a7a42; }
+.prompt-box pre { color: #EAE5E1; padding: 16px 18px; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; line-height: 1.7; white-space: pre-wrap; word-break: break-word; margin: 0; }
+.prompt-box .placeholder { color: #f0a020; font-style: italic; }
+.fb-callout { background: #fdf5e0; border-left: 3px solid #f0a020; padding: 12px 16px; border-radius: 6px; margin-bottom: 16px; }
+.fb-callout strong { color: #856404; font-size: 13px; display: block; margin-bottom: 4px; }
+.fb-callout p { font-size: 12px; color: #6c5520; line-height: 1.6; margin: 0; }
+.fb-callout a { color: #b57800; }
 
 /* Layout */
 .container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
@@ -70,8 +125,15 @@ details.fb-help code { background: #fff; padding: 1px 6px; border-radius: 3px; f
 .docs pre { background: #2c2c2c; color: #EAE5E1; padding: 14px; border-radius: 6px; font-family: 'SF Mono', Consolas, monospace; font-size: 12px; overflow-x: auto; margin: 10px 0; line-height: 1.6; }
 
 @media (max-width: 640px) {
-  .hero h1 { font-size: 26px; }
-  .hero { padding: 48px 20px 40px; }
+  .brand-logo .wordmark { font-size: 30px; }
+  .brand-logo svg { width: 28px; height: 36px; }
+  .hero { padding: 40px 18px 48px; }
+  .hero .tag { font-size: 15px; }
+  .hero .features { gap: 14px; }
+  .topnav { padding: 10px 16px; }
+  .topnav a { margin-left: 10px; font-size: 12px; }
+  .path-picker { padding: 0 16px; margin-top: -24px; }
+  .path-tabs { grid-template-columns: 1fr; }
   .container { padding: 24px 16px 60px; }
   .section { padding: 18px; }
   .two-col { grid-template-columns: 1fr; }
@@ -80,22 +142,144 @@ details.fb-help code { background: #fff; padding: 1px 6px; border-radius: 3px; f
 </head>
 <body>
 
+<!-- Top nav -->
+<nav class="topnav">
+  <div class="brand-sm">
+    <svg viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg"><path fill="#CD1543" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 24 16 24s16-12 16-24C32 7.2 24.8 0 16 0z"/><circle cx="16" cy="16" r="6" fill="#EAE5E1"/></svg>
+    Planmark
+  </div>
+  <div>
+    <a href="https://github.com/Prefonbain/planmark" target="_blank">GitHub ↗</a>
+    <a href="#docs">Docs</a>
+  </div>
+</nav>
+
 <!-- Hero -->
 <section class="hero">
-  <h1>Home Build Review</h1>
-  <p class="tag">A collaborative floor plan review tool for homeowners working with their builder. Markup plans, track notes by priority and room, chat in threads, and compare revisions — all synced live.</p>
-  <a href="#wizard" class="cta">Set up your review →</a>
-  <div class="features">
-    <div class="feat"><span class="feat-dot"></span> Live collaborative notes</div>
-    <div class="feat"><span class="feat-dot"></span> Drawing & markup tools</div>
-    <div class="feat"><span class="feat-dot"></span> Multi-version & multi-sheet</div>
-    <div class="feat"><span class="feat-dot"></span> Review checklist</div>
-    <div class="feat"><span class="feat-dot"></span> Free to host</div>
+  <div class="hero-inner">
+    <div class="brand-logo">
+      <svg viewBox="0 0 32 40" xmlns="http://www.w3.org/2000/svg"><path fill="#CD1543" d="M16 0C7.2 0 0 7.2 0 16c0 12 16 24 16 24s16-12 16-24C32 7.2 24.8 0 16 0z"/><circle cx="16" cy="16" r="6" fill="#EAE5E1"/></svg>
+      <div class="wordmark"><span class="plan">plan</span><span class="mark">mark</span></div>
+    </div>
+    <p class="tag">Collaborative floor plan review for homeowners and their builder.</p>
+    <p class="subtag">Drop notes anywhere on the plan. Mark up drawings. Compare revisions. Everyone sees everything live.</p>
+    <div class="features">
+      <div class="feat"><span class="feat-dot"></span> Live collaborative notes</div>
+      <div class="feat"><span class="feat-dot"></span> Drawing & markup tools</div>
+      <div class="feat"><span class="feat-dot"></span> Multi-version & multi-sheet</div>
+      <div class="feat"><span class="feat-dot"></span> Review checklist</div>
+      <div class="feat"><span class="feat-dot"></span> Free to host</div>
+    </div>
   </div>
 </section>
 
-<!-- Wizard -->
-<div class="container" id="wizard">
+<!-- Path picker -->
+<div class="path-picker">
+  <div class="path-tabs" role="tablist">
+    <button class="path-tab active" role="tab" onclick="switchMode('wizard', this)">
+      <div class="path-icon">📝</div>
+      <div class="path-body">
+        <span class="path-title">Set up with the wizard</span>
+        <span class="path-sub">Fill out a form, download your customized review.html. ~5 min.</span>
+      </div>
+    </button>
+    <button class="path-tab" role="tab" onclick="switchMode('claude', this)">
+      <div class="path-icon">✨</div>
+      <div class="path-body">
+        <span class="path-title">Set up with Claude Code</span>
+        <span class="path-sub">Paste a prompt — Claude handles the whole setup. ~2 min.</span>
+      </div>
+    </button>
+  </div>
+</div>
+
+<!-- Claude Code path -->
+<div class="container setup-mode" id="mode-claude">
+  <div style="margin-bottom: 20px">
+    <h2>Let Claude Code do the setup</h2>
+    <p style="font-size: 13px; color: #888">If you use <a href="https://claude.com/claude-code" target="_blank" style="color:#CD1543;text-decoration:none;font-weight:600">Claude Code</a>, paste the prompt below into a new session. Claude will read the setup instructions in this repo's <code>CLAUDE.md</code>, ask you for details, handle the template substitution, create a new GitHub repo, and enable GitHub Pages.</p>
+  </div>
+
+  <div class="fb-callout">
+    <strong>One thing Claude can't automate: Firebase setup</strong>
+    <p>Firebase project creation requires a Google sign-in in the browser. Claude will walk you through it (about 5 minutes at <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a>) and wait for you to paste back the config.</p>
+  </div>
+
+  <div class="cc-intro">
+    <h3 style="margin-bottom:10px">The prompt</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:14px">Fill in whatever details you already know. Leave the rest — Claude will ask.</p>
+    <div class="prompt-box">
+      <div class="prompt-box-header">
+        <span>Paste into Claude Code</span>
+        <button class="prompt-box-copy" id="copy-prompt-btn" onclick="copyPrompt()">Copy</button>
+      </div>
+      <pre id="prompt-text">Set up Planmark for my home build, following the setup flow in https://github.com/Prefonbain/planmark/blob/main/CLAUDE.md.
+
+Details:
+- Project name: <span class="placeholder">Smith Family Residence</span>
+- Builder name: <span class="placeholder">Acme Home Builders</span>
+- Reviewers: <span class="placeholder">Alice, Bob, Guest</span>
+- Floor plan images: <span class="placeholder">~/Downloads/plans/</span> (PNGs, one per sheet per revision)
+- GitHub repo name: <span class="placeholder">smith-family-review</span>
+
+Ask me for anything else you need (Firebase config, rooms list, plan revisions, sheet labels). Walk me through Firebase setup when you get there.</pre>
+    </div>
+  </div>
+
+  <div class="cc-steps">
+    <h3 style="margin-bottom:4px">What Claude will do</h3>
+    <p style="font-size:13px;color:#888;margin-bottom:10px">Roughly, in this order:</p>
+    <div class="cc-step">
+      <div class="cc-num">1</div>
+      <div class="cc-body">
+        <h4>Ask any missing details</h4>
+        <p>Rooms list, plan revisions (IDs + dates), sheet labels for each PDF page, default revision to show on first open.</p>
+      </div>
+    </div>
+    <div class="cc-step">
+      <div class="cc-num">2</div>
+      <div class="cc-body">
+        <h4>Walk you through Firebase</h4>
+        <p>Creating the project at <code>console.firebase.google.com</code>, enabling Firestore in test mode, registering a web app, and pasting the six config values back to Claude.</p>
+      </div>
+    </div>
+    <div class="cc-step">
+      <div class="cc-num">3</div>
+      <div class="cc-body">
+        <h4>Generate <code>review.html</code></h4>
+        <p>Substitutes your details into this repo's <code>template.html</code>.</p>
+      </div>
+    </div>
+    <div class="cc-step">
+      <div class="cc-num">4</div>
+      <div class="cc-body">
+        <h4>Create a new GitHub repo and push</h4>
+        <p>Copies in <code>review.html</code> plus your floor plan PNGs (renamed to match the version prefixes). Requires <code>gh</code> CLI authenticated.</p>
+      </div>
+    </div>
+    <div class="cc-step">
+      <div class="cc-num">5</div>
+      <div class="cc-body">
+        <h4>Enable GitHub Pages</h4>
+        <p>Hits the Pages API, polls until the build is live, and hands you the URL to share with your builder.</p>
+      </div>
+    </div>
+    <div class="cc-step">
+      <div class="cc-num">6</div>
+      <div class="cc-body">
+        <h4>Remind you to lock down Firestore rules</h4>
+        <p>Test-mode rules let anyone with the URL read/write. The CLAUDE.md in this repo has the secure ruleset to paste in after you verify the site works.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:20px 0;font-size:12px;color:#aaa">
+    Want to see exactly what Claude will do? Read the full <a href="https://github.com/Prefonbain/planmark/blob/main/CLAUDE.md" target="_blank" style="color:#CD1543">CLAUDE.md instructions</a>.
+  </div>
+</div>
+
+<!-- Wizard path -->
+<div class="container setup-mode active" id="mode-wizard">
 
   <div style="margin-bottom: 20px">
     <h2>Configure your review tool</h2>
@@ -271,6 +455,29 @@ service cloud.firestore {
 </div>
 
 <script>
+// ══════════════════════════════════════════
+// Path picker + copy prompt
+// ══════════════════════════════════════════
+function switchMode(mode, tabEl) {
+  document.querySelectorAll('.path-tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+  document.querySelectorAll('.setup-mode').forEach(s => s.classList.remove('active'));
+  document.getElementById('mode-' + mode).classList.add('active');
+  window.scrollTo({ top: document.querySelector('.path-picker').offsetTop - 20, behavior: 'smooth' });
+}
+
+function copyPrompt() {
+  const el = document.getElementById('prompt-text');
+  const text = el.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-prompt-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1800);
+  });
+}
+
 // ══════════════════════════════════════════
 // Template fetch (cached after first load)
 // ══════════════════════════════════════════
